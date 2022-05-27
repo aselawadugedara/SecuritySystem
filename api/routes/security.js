@@ -42,6 +42,7 @@ router.get("/", async (req, res) => {
         seconds;
   
       console.log(dateTime);
+      console.log(req.body);
       let security = new Security({
         doorStatus: req.body.doorStatus,
         gasStatus: req.body.gasStatus,

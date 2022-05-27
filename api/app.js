@@ -5,8 +5,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 require("dotenv").config()
 const app = express();
-const swaggerJsDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
+const security = require("./routes/security")
 
 const PORT = process.env.PORT || 4000
 
@@ -33,4 +32,9 @@ app.listen(PORT, () => {
   connection.once("open",() => {
       console.log("Mongodb Connection Success!");
   })
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use("/api/security", security);
+
   
