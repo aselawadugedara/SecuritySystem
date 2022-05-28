@@ -9,14 +9,6 @@ const securitySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  humidityStatus: {
-    type: String,
-    required: true,
-  },
-  lightStatus: {
-    type: String,
-    required: true,
-  },
   status_update_time: {
     type: Date,
     required: true,

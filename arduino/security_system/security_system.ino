@@ -18,6 +18,14 @@ int ledPin = 12; // choose pin for the LED
 int inputPin = 13; // choose input pin (for Infrared sensor) 
 int val = 0; // variable for reading the pin status
 Servo servo;
+int smokeA0 = A0;
+int sensorThres = 600;
+int gasLedPin = D0;
+int gasBuzzer = D3;
+String gasStatus;
+String displayDoor;
+HTTPClient http;    //Declare object of class HTTPClient
+WiFiClient clientt;
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -27,15 +35,10 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
  
 ESP8266WebServer server(80);
 void showDoorStatus() {
-      HTTPClient http;    //Declare object of class HTTPClient
-      WiFiClient clientt;
-      
       DynamicJsonDocument doc(512);
  
       doc["doorStatus"] = val;
-      doc["gasStatus"] = 0;
-      doc["humidityStatus"] = 0;
-      doc["lightStatus"] = 0;
+      doc["gasStatus"] = gasStatus;
  
       Serial.print(F("Stream..."));
       String buf;
@@ -43,17 +46,19 @@ void showDoorStatus() {
       http.begin(clientt,"http://192.168.1.112:4000/api/security/"); 
       http.addHeader("Content-Type", "application/json");
       http.POST(buf); 
-      server.send(200, F("application/json"), buf);
+//      server.send(200, F("application/json"), buf);
       Serial.print(F("done."));
       Serial.print(buf);
 }
 
 void doorClose(){
       servo.write(0);
+      val = 0;
       showDoorStatus();
   }
 void doorOpen(){
       servo.write(180);
+      val = 1;
       showDoorStatus();
   }
  
@@ -82,6 +87,9 @@ void setup(void) {
  pinMode(ledPin, OUTPUT); // declare LED as output 
  pinMode(inputPin, INPUT); // declare Infrared sensor as input
  pinMode(buzzer, OUTPUT);
+ pinMode(smokeA0, INPUT);
+ pinMode(gasLedPin, OUTPUT);
+ pinMode(gasBuzzer, OUTPUT);
  
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
@@ -111,14 +119,7 @@ void loop(void) {
       digitalWrite(buzzer, HIGH);
       Serial.println(val);
       Serial.println("Door open");
-
-   // Display Text
-  display.setTextSize(1);
-  display.setTextColor(WHITE);
-  display.setCursor(0,28);
-  display.println("Door open!");
-  display.display();
-  display.clearDisplay();
+      displayDoor = "Door open";
    } 
    else 
    { 
@@ -126,14 +127,35 @@ void loop(void) {
       digitalWrite(buzzer, LOW);
       Serial.println(val);
       Serial.println("Door close");
+      displayDoor = "Door close";
+   }
 
+    int analogSensor = analogRead(smokeA0);
+
+ Serial.print("Pin A0: ");
+ Serial.println(analogSensor);
+ // Checks if it has reached the threshold value
+ if (analogSensor > sensorThres)
+ {
+   tone(gasBuzzer, 1000, 200);
+//  digitalWrite(gasBuzzer, HIGH);
+   digitalWrite(gasLedPin, HIGH);
+   gasStatus = "Gas Leak";
+ }
+ else
+ {
+   noTone(gasBuzzer);
+//  digitalWrite(gasBuzzer, LOW);
+   digitalWrite(gasLedPin, LOW);
+   gasStatus = "No gas leak";
+ }
   // Display Text
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,28);
-  display.println("Door close!");
+  display.println(displayDoor);
+  display.println(gasStatus);
   display.display();
   display.clearDisplay();
-     
-   }
+ showDoorStatus();
 }

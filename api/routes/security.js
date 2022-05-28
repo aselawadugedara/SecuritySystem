@@ -46,8 +46,6 @@ router.get("/", async (req, res) => {
       let security = new Security({
         doorStatus: req.body.doorStatus,
         gasStatus: req.body.gasStatus,
-        humidityStatus: req.body.humidityStatus,
-        lightStatus: req.body.lightStatus,
         status_update_time: dateTime,
       });
       security = await security.save();
