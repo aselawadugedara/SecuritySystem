@@ -25,7 +25,7 @@ function NavBar() {
     >
       <Container fluid>
         <Navbar.Brand as={Link} className="navbarName" to="">
-          CattyLove
+          Security System
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <form method="get" action="http://192.168.2.133/doorOpen">
