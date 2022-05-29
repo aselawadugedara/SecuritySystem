@@ -2,19 +2,14 @@ const express = require("express");
 const Security = require("../models/securityModel")
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-    try {
-      let user = await User.find().sort({ name: "asc" });
-      let comment = await Comment.find().sort({ comment: "asc" });
-      let cats = await Cat.find().sort({ name: "asc" });
-  
-      let data = [user, cats, comment];
-  
-      return res.send(data);
-    } catch (ex) {
+router.get("/", async(req, res) => {
+  try{
+      let securityData = await Security.find().sort({ status_update_time: "desc" });
+      return res.send(securityData);
+  } catch(ex){
       return res.status(500).send("Error: " + ex.message);
-    }
-  });
+  }
+}),
 
   router.post("/", async (req, res) => {
     try {
