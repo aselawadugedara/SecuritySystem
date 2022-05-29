@@ -37,7 +37,7 @@ ESP8266WebServer server(80);
 void showDoorStatus() {
       DynamicJsonDocument doc(512);
  
-      doc["doorStatus"] = val;
+      doc["doorStatus"] = displayDoor;
       doc["gasStatus"] = gasStatus;
  
       Serial.print(F("Stream..."));
@@ -46,7 +46,7 @@ void showDoorStatus() {
       http.begin(clientt,"http://192.168.1.112:4000/api/security/"); 
       http.addHeader("Content-Type", "application/json");
       http.POST(buf); 
-//      server.send(200, F("application/json"), buf);
+      server.send(200, F("application/json"), buf);
       Serial.print(F("done."));
       Serial.print(buf);
 }
