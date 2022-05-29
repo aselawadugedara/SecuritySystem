@@ -59,7 +59,7 @@ class Footer extends Component {
           </div>
 
           <div class="footer-copyright text-center special-color-gray-dark py-3">
-            © 2022 Copyright: Shannon Gunarathne
+            © 2022 Copyright: Group 01
           </div>
         </footer>
       </Container>
