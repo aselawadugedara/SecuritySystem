@@ -6,6 +6,7 @@ import ReactDOM from "react-dom";
 import NavBar from "./components/navBar";
 import Footer from "./components/footer";
 import Home from "./components/home";
+import Securities from "./components/securities"
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route exact path="/" element={<Home />} />
           </Routes>
         </React.Fragment>
+        <Securities/>
         <Footer />
       </BrowserRouter>,
       document.getElementById("root")
