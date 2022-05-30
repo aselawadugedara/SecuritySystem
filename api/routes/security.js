@@ -41,6 +41,7 @@ router.get("/", async(req, res) => {
       let security = new Security({
         doorStatus: req.body.doorStatus,
         gasStatus: req.body.gasStatus,
+        fireDitect: req.body.fireDitect,
         status_update_time: dateTime,
       });
       security = await security.save();

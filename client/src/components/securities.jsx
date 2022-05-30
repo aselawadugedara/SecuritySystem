@@ -26,6 +26,7 @@ class Securities extends Component {
                             security ID: {securityData.securityID} <br/>
                             Door Status: {securityData.doorStatus} <br/>
                             Gas Status: {securityData.gasStatus} <br/>
+                            Fire Status: {securityData.fireDitect} <br/>
                             Time: {securityData.status_update_time} <br/>
                           </p>
                         </div>
@@ -49,6 +50,7 @@ class Securities extends Component {
         securityID: security._id,
         doorStatus: security.doorStatus,
         gasStatus: security.gasStatus,
+        fireDitect: security.fireDitect,
         status_update_time: security.status_update_time,
       };
     });
