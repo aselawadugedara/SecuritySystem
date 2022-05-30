@@ -24,6 +24,9 @@ int gasLedPin = D0;
 int gasBuzzer = D3;
 String gasStatus;
 String displayDoor;
+int flame_sensor = D8;
+String fireDitect;
+int flame_sensor_read;
 HTTPClient http;    //Declare object of class HTTPClient
 WiFiClient clientt;
 
@@ -39,6 +42,7 @@ void showDoorStatus() {
  
       doc["doorStatus"] = displayDoor;
       doc["gasStatus"] = gasStatus;
+      doc["fireDitect"] = fireDitect;
  
       Serial.print(F("Stream..."));
       String buf;
@@ -90,6 +94,7 @@ void setup(void) {
  pinMode(smokeA0, INPUT);
  pinMode(gasLedPin, OUTPUT);
  pinMode(gasBuzzer, OUTPUT);
+ pinMode(flame_sensor, INPUT);
  
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
@@ -149,12 +154,28 @@ void loop(void) {
    digitalWrite(gasLedPin, LOW);
    gasStatus = "No gas leak";
  }
+ flame_sensor_read = digitalRead(flame_sensor);
+if (flame_sensor_read == 0)
+    {
+//    digitalWrite(gasLedPin, HIGH);
+//    tone(gasBuzzer, 1000, 200);
+    Serial.print("Alert Fire Detected");
+    fireDitect = "Fire Detected";
+    }
+  else
+      {
+//      digitalWrite(gasLedPin, LOW);
+//      noTone(gasBuzzer);
+      fireDitect = "Fire Not Detected";
+      
+      }
   // Display Text
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0,28);
   display.println(displayDoor);
   display.println(gasStatus);
+  display.println(fireDitect);
   display.display();
   display.clearDisplay();
  showDoorStatus();

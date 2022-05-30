@@ -8,6 +8,10 @@ const securitySchema = new mongoose.Schema({
   gasStatus: {
     type: String,
     required: true,
+  },  
+  fireDitect: {
+    type: String,
+    required: true,
   },
   status_update_time: {
     type: Date,
